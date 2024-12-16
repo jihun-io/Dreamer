@@ -101,6 +101,8 @@ export function Select({
   background = "default",
   label,
   options = [],
+  placeholder = "Select option",
+  className,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(value);
@@ -209,8 +211,7 @@ export function Select({
   };
 
   const selectedLabel =
-    options.find((opt) => opt.value === selectedOption)?.label ||
-    "Select option";
+    options.find((opt) => opt.value === selectedOption)?.label || placeholder;
 
   return (
     <div
@@ -220,7 +221,7 @@ export function Select({
     >
       <button
         type="button"
-        className={styles.selectButton}
+        className={`${styles.selectButton} ${className}`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-labelledby={label ? `${id}-label` : undefined}
@@ -497,4 +498,32 @@ export function Divider({ className }) {
     : styles["dashed-line"];
 
   return <div className={dividerClass}></div>;
+}
+
+export function ConfirmModal({ onConfirm, isOpen, closeModal, message }) {
+  const dialogRef = useRef(null);
+  useEffect(() => {
+    if (isOpen && dialogRef.current) {
+      dialogRef.current.showModal();
+    } else if (dialogRef.current) {
+      dialogRef.current.close();
+    }
+  }, [isOpen]);
+
+  return (
+    <dialog ref={dialogRef} className={styles["confirm-modal"]}>
+      <p>{message}</p>
+      <div>
+        <button onClick={onConfirm} className={styles["btn-yes"]}>
+          네
+        </button>
+        <button onClick={closeModal} className={styles["btn-no"]}>
+          아니오
+        </button>
+      </div>
+      <button onClick={closeModal} className={styles["btn-close"]}>
+        <span className="sr-only">닫기</span>
+      </button>
+    </dialog>
+  );
 }
