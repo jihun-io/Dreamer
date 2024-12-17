@@ -51,8 +51,6 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
     }
   };
 
-  console.log(imageFiles);
-
   useEffect(() => {
     const handleEscKey = (e) => {
       if (isWriteModalOpen && e.key === "Escape") {
@@ -146,18 +144,43 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
     }
   };
 
-  //이미지
-  const handleDeleteImage = (id) => {
-    setImageFiles((prevFiles) => {
-      const { [id]: deletedFile, ...rest } = prevFiles; // 삭제할 파일 제외한 나머지 객체로 반환
-      return rest;
+  // 이미지 삭제
+  const handleDeleteImage = (indexToRemove) => {
+    if (!imageFiles) return;
+
+    const dataTransfer = new DataTransfer();
+    const files = Array.from(imageFiles);
+
+    // 선택된 인덱스를 제외한 나머지 파일들을 새로운 FileList에 추가
+    files.forEach((file, index) => {
+      if (index !== indexToRemove) {
+        dataTransfer.items.add(file);
+      }
     });
+
+    setImageFiles(dataTransfer.files);
   };
 
-  // 파일 추가하는 함수 예시
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-    setImageFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
+  // 파일 추가하는 함수
+  const handleFileChange = (e) => {
+    if (!imageFiles) {
+      // 처음 파일을 추가하는 경우
+      setImageFiles(e.target.files);
+    } else {
+      // 기존 파일이 있는 경우, 새로운 FileList를 기존 파일과 합치기
+      const newFiles = Array.from(e.target.files);
+      const existingFiles = Array.from(imageFiles);
+
+      // FileList 객체를 생성하기 위해 DataTransfer 사용
+      const dataTransfer = new DataTransfer();
+
+      // 기존 파일과 새 파일을 모두 추가
+      [...existingFiles, ...newFiles].forEach((file) => {
+        dataTransfer.items.add(file);
+      });
+
+      setImageFiles(dataTransfer.files);
+    }
   };
 
   // 버튼위치에 따른 모달위치고정
@@ -469,7 +492,7 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
                     accept="image/*"
                     id={styles["file"]}
                     multiple
-                    onChange={(e) => setImageFiles(e.target.files)}
+                    onChange={handleFileChange}
                   />
                 </label>
               </div>
@@ -490,7 +513,7 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
                       <button
                         type="button"
                         className={styles["image-delete"]}
-                        onClick={() => handleDeleteImage(img.url)}
+                        onClick={() => handleDeleteImage(index)}
                       >
                         <Image
                           src="/images/close.svg"
