@@ -9,12 +9,14 @@ import MoodModal from "./MoodModal";
 import { useSelector } from "react-redux";
 import { fetchWithAuth } from "@/utils/auth/tokenUtils";
 import useTheme from "@/hooks/styling/useTheme";
+import { combineSlices } from "@reduxjs/toolkit";
 
 export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
   const [isWritingModalOpen, setIsWritingModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [contentValue, setContentValue] = useState("");
   const [isContentChanged, setIsContentChanged] = useState(false);
+  const [imageFiles, setImageFiles] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const { theme } = useTheme();
 
@@ -28,6 +30,7 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
       modalRef.current.showModal();
     } else if (modalRef.current) {
       modalRef.current.close();
+      setImageFiles(null);
     }
   }, [isWriteModalOpen]);
   // 외부 클릭
@@ -38,7 +41,8 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
         inputValue !== "" ||
         selectedGenres.length > 0 ||
         selectedMoods.length > 0 ||
-        rating !== null
+        rating !== null ||
+        imageFiles !== null
       ) {
         setIsStopModalOpen(true);
       } else {
@@ -46,6 +50,8 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
       }
     }
   };
+
+  console.log(imageFiles);
 
   useEffect(() => {
     const handleEscKey = (e) => {
@@ -140,6 +146,20 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
     }
   };
 
+  //이미지
+  const handleDeleteImage = (id) => {
+    setImageFiles((prevFiles) => {
+      const { [id]: deletedFile, ...rest } = prevFiles; // 삭제할 파일 제외한 나머지 객체로 반환
+      return rest;
+    });
+  };
+
+  // 파일 추가하는 함수 예시
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    setImageFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
+  };
+
   // 버튼위치에 따른 모달위치고정
   const [tagModalStyle, setTagModalStyle] = useState({});
   const [moodModalStyle, setMoodModalStyle] = useState({});
@@ -158,7 +178,6 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
           left: `${buttonRect.left + window.scrollX}px`,
           zIndex: "10",
         };
-        console.log(position);
 
         setTagModalStyle(position);
       };
@@ -168,15 +187,11 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
 
       return () => {
         window.removeEventListener("resize", updatePosition);
-        console.log("tagButtonRef.current:", tagButtonRef.current);
-        console.log("tagModalRef.current:", tagModalRef.current);
       };
     }
   }, [tagButtonRef, tagModalRef, isModalOpen]);
 
   useLayoutEffect(() => {
-    console.log("moodButtonRef.current:", moodButtonRef.current); // 확인
-    console.log("moodModalRef.current:", moodModalRef.current);
     if (moodButtonRef.current && moodModalRef.current) {
       const updatePosition = () => {
         const buttonRect = moodButtonRef.current.getBoundingClientRect();
@@ -186,7 +201,6 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
           left: `${buttonRect.left + window.scrollX - 8}px`,
           zIndex: "10",
         };
-        console.log(position);
 
         setMoodModalStyle(position);
       };
@@ -234,6 +248,11 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
     formData.append("moods", JSON.stringify(moodsId));
     formData.append("rating", rating === null ? "0" : rating);
     formData.append("isPrivate", isPrivate ? "true" : "false");
+    if (imageFiles.length > 0) {
+      Array.from(imageFiles).forEach((file) => {
+        formData.append("images", file);
+      });
+    }
 
     try {
       const response = await fetchWithAuth("/api/post/create", {
@@ -442,16 +461,54 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
                   checked={rating === "5"}
                 />
               </div>
+              <div className={styles["image-uploader"]}>
+                <label>
+                  <div className={styles["btn-upload"]}>이미지 추가하기</div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id={styles["file"]}
+                    multiple
+                    onChange={(e) => setImageFiles(e.target.files)}
+                  />
+                </label>
+              </div>
             </div>
             <span className={styles["break-line"]}></span>
             <p className={styles["text-field-area"]}>
               <span className="sr-only">글 작성</span>
               <textarea
                 placeholder="오늘은 어떤 꿈을 꾸셨나요?"
-                className={styles["text-field-area"]}
+                className={`${styles["text-field-area"]} ${imageFiles !== null && styles["has-image"]}`}
                 onChange={handleContentChange}
                 value={contentValue}
               />
+              <section className={styles["image-preview-field"]}>
+                {imageFiles &&
+                  Array.from(imageFiles).map((img, index) => (
+                    <div key={index} className={styles["image-container"]}>
+                      <button
+                        type="button"
+                        className={styles["image-delete"]}
+                        onClick={() => handleDeleteImage(img.url)}
+                      >
+                        <Image
+                          src="/images/close.svg"
+                          width={30}
+                          height={30}
+                          alt="이미지 삭제"
+                        />
+                      </button>
+                      <img
+                        src={URL.createObjectURL(img)}
+                        width={100}
+                        height={100}
+                        alt={`이미지${index}`}
+                        className={styles["preview-image"]}
+                      />
+                    </div>
+                  ))}
+              </section>
             </p>
           </div>
           <div className={styles["btn-submit-area"]}>
