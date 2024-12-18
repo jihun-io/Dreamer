@@ -13,6 +13,7 @@ import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import TomongListItem from "@/components/tomong/TomongListItem";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function TomongIntro({ setProcess }) {
   return (
@@ -40,7 +41,7 @@ function TomongIntro({ setProcess }) {
         </Button>
       </div>
       <div className={styles["btn-row"]}>
-        <Button onClick={() => history.back()}>뒤로</Button>
+        <Button onClick={() => history.back()}>이전 페이지로</Button>
         <Button onClick={() => setProcess(101)}>해몽된 꿈 보러 가기</Button>
       </div>
     </>
@@ -483,6 +484,15 @@ export default function Tomong() {
   const [before, setBefore] = useState(0);
   const [selectedDream, setSelectedDream] = useState(null);
   const [tomongDream, setTomongDream] = useState(null);
+
+  const { user } = useSelector((state) => state.auth);
+
+  const router = useRouter();
+
+  if (!user) {
+    router.push("/");
+    return null;
+  }
 
   return (
     <div className={styles["container"]}>

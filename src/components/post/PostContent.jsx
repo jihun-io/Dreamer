@@ -42,9 +42,7 @@ export default function PostContent({
   const buttonRef = useRef(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
-
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
   const router = useRouter();
 
   useEffect(() => {
@@ -57,6 +55,13 @@ export default function PostContent({
           } else {
             response = await fetch(`/api/post/search/${postId}`);
           }
+
+          if (response.status === 404) {
+            alert("해당 게시글을 찾을 수 없습니다.");
+            onClose();
+            return;
+          }
+
           const data = await response.json();
           setPostData(data.post);
         }
@@ -531,13 +536,17 @@ export default function PostContent({
                 </li>
 
                 <li>
-                  <button type="submit">
-                    <img
-                      src="/images/send.svg"
-                      width={30}
-                      height={30}
-                      alt="댓글 입력"
-                    />
+                  <button type="submit" disabled={isCommentSubmitting}>
+                    {isCommentSubmitting ? (
+                      <Loading type="miniCircle" />
+                    ) : (
+                      <img
+                        src="/images/send.svg"
+                        width={30}
+                        height={30}
+                        alt="댓글 입력"
+                      />
+                    )}
                   </button>
                 </li>
               </ul>
