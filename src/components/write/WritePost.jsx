@@ -96,7 +96,7 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
     setRating(e.target.value);
   };
   const openModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen(true);
   };
 
   const openMoodModal = () => {
@@ -274,7 +274,7 @@ export default function WritePost({ isWriteModalOpen, closeWriteModal }) {
       if (response.ok) {
         const result = await response.json();
         const postId = result.postId;
-        location.href = `/${user.userId}?post=${postId}`;
+        location.href = `/users/${user.userId}?post=${postId}`;
         closeWriteModal();
         resetForm();
       } else {

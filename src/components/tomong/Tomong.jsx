@@ -21,7 +21,7 @@ export function TomongIntro({ setProcess }) {
   return (
     <>
       <h2 className={styles["title"]}>토몽 AI</h2>
-      <div className={styles["tomong-body"]}>
+      <div className={`${styles["tomong-body"]} ${styles["tomong-first"]}`}>
         <p className={styles["headings"]}>
           반가워요! 드리머 여러분의 꿈 해몽가 <strong>토몽</strong>이에요!{" "}
         </p>
@@ -37,14 +37,15 @@ export function TomongIntro({ setProcess }) {
         <Button
           highlight={true}
           onClick={() => setProcess(1)}
+          className={styles["start-btn"]}
           style={{ marginLeft: "auto", marginRight: "auto" }}
         >
           시작하기
         </Button>
       </div>
       <div className={styles["btn-row"]}>
-        <Button onClick={() => history.back()}>이전 페이지로</Button>
-        <Button onClick={() => setProcess(101)}>해몽된 꿈 보러 가기</Button>
+        <Button onClick={() => history.back()}>이전 페이지</Button>
+        <Button onClick={() => setProcess(101)}>해몽된 꿈 목록...</Button>
       </div>
     </>
   );
@@ -86,7 +87,7 @@ export function TomongSelect({ setProcess, setSelectedDream }) {
         ) : !dreams.length ? (
           <>
             <p>아직 {userName}님이 들려준 꿈이 없어요!</p>
-            <ButtonLink highlight={true} href={`/${userId}?write=true`}>
+            <ButtonLink highlight={true} href={`/users/${userId}?write=true`}>
               꿈 작성하러 가기
             </ButtonLink>
           </>
@@ -109,7 +110,11 @@ export function TomongSelect({ setProcess, setSelectedDream }) {
         <Button onClick={() => setProcess(0)}>뒤로</Button>
         {!selectedDream && <Button disabled>해몽하기</Button>}
         {selectedDream && (
-          <Button highlight={true} onClick={() => setProcess(2)}>
+          <Button
+            className={styles["start-btn"]}
+            highlight={true}
+            onClick={() => setProcess(2)}
+          >
             해몽하기
           </Button>
         )}
@@ -487,8 +492,11 @@ export function TomongRead({ setProcess, tomongDream, before }) {
       </div>
       <div className={styles["btn-row"]}>
         <Button onClick={handleBack}>뒤로</Button>
-        <ButtonLink href={`/${userId}`} highlight={true}>
-          프로필로 이동
+        <ButtonLink
+          href={`/users/${userId}?post=${tomongDream.id}`}
+          highlight={true}
+        >
+          게시글로 이동
         </ButtonLink>
       </div>
     </>
@@ -511,7 +519,7 @@ export default function TomongComponent() {
   }
 
   return (
-    <div className={styles["container"]}>
+    <>
       <h1>
         <Link href="/">
           <img src="/images/logo-full.svg" alt="DREAMER" width={240} />
@@ -548,6 +556,6 @@ export default function TomongComponent() {
           />
         )}
       </main>
-    </div>
+    </>
   );
 }

@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkUserExists } from "@/utils/auth/checkUser";
 import { Button, Input, LoginForm } from "../Controls";
 import styles from "./SocialLogin.module.css";
-import EmailSignup from "./EmailSignup";
+import Loading from "../Loading";
 
 export default function SocialLogin() {
   const router = useRouter();
@@ -22,7 +22,8 @@ export default function SocialLogin() {
   const [showSignupForm, setShowSignupForm] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [emailValid, setEmailValid] = useState(false);
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
   const dispatch = useDispatch();
   const { user: reduxUser } = useSelector((state) => state.auth);
 
@@ -84,6 +85,7 @@ export default function SocialLogin() {
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
+    setIsLoginLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -119,7 +121,12 @@ export default function SocialLogin() {
         router.push("/");
       }
     } catch (error) {
-      setError("이메일 로그인 중 오류가 발생했습니다.");
+      setError(
+        error.code === "auth/too-many-requests"
+          ? "너무 많은 로그인 시도가 발생하였습니다. 잠시 후에 다시 시도해주세요."
+          : "아이디 또는 비밀번호가 일치하지 않습니다"
+      );
+      setIsLoginLoading(false);
       console.error("Email login error:", error);
     }
   };
@@ -128,7 +135,7 @@ export default function SocialLogin() {
     <section className={styles["login-container"]}>
       {showEmailForm && !showSignupForm ? (
         <>
-          <h2 className={styles["login-title"]}>이메일로 로그인</h2>
+          <h2 className={styles["login-title"]}>이메일로 로그인하기</h2>
           <p>다시 꿈꾸러 오셔서 기뻐요!</p>
           <LoginForm
             onSubmit={handleEmailLogin}
@@ -140,7 +147,12 @@ export default function SocialLogin() {
                 type="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmailValid(
+                    e.target.value !== "" && e.target.validity.valid
+                  );
+                  setEmail(e.target.value);
+                }}
                 required
               />
             </label>
@@ -155,17 +167,23 @@ export default function SocialLogin() {
               />
             </label>
             <p role="alert" className={styles["error-message"]}>
-              {email === "" || password === ""
-                ? "이메일과 비밀번호를 입력해주세요"
-                : error && "이메일 또는 비밀번호가 일치하지 않습니다"}
+              {error}
             </p>
-            <Button
-              type="submit"
-              highlight={true}
-              className={styles["login-button"]}
-            >
-              로그인
-            </Button>
+            {isLoginLoading ? (
+              <Loading
+                type={"miniCircle"}
+                className={styles["login-loading"]}
+              />
+            ) : (
+              <Button
+                type="submit"
+                highlight={true}
+                className={styles["login-button"]}
+                disabled={emailValid && password !== "" ? false : true}
+              >
+                로그인
+              </Button>
+            )}
             <div className={styles["google-login"]}>
               <p>다른 방법으로 로그인하기</p>
               <button type="button" onClick={handleGoogleLogin}>
@@ -173,7 +191,7 @@ export default function SocialLogin() {
                   src="/images/google-logo.svg"
                   width={40}
                   height={40}
-                  alt="google 로그인"
+                  alt="Google로 로그인"
                 />
               </button>
             </div>
@@ -182,22 +200,6 @@ export default function SocialLogin() {
               <Link href="/join">가입하기</Link>
             </div>
           </LoginForm>
-        </>
-      ) : showSignupForm ? (
-        <>
-          <h2 className={styles["login-title"]}>회원가입</h2>
-          <p>새로운 드리머가 되어 당신이 꾼 꿈을 알려주세요!</p>
-          <EmailSignup
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            setShowSignupForm={setShowSignupForm}
-            error={error}
-            setError={setError}
-            checkUserExists={checkUserExists}
-            handleGoogleLogin={handleGoogleLogin}
-          />
         </>
       ) : (
         <>

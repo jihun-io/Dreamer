@@ -73,11 +73,22 @@ html:has(.post-modal) {
 .profile-info {
   display: flex;
   flex-wrap: wrap;
-  max-width: 12.7rem;
   font-size: var(--h2-font-size);
   margin-bottom: 1.6rem;
 }
-
+.long-profile-info,
+.long-profile-info span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 16ch;
+}
+.uploaded-time,
+.profile-info span {
+  display: block;
+  width: 100%;
+}
 .uploaded-time {
   font-size: var(--body-font-size);
   color: var(--time-font-color);
@@ -153,19 +164,32 @@ html:has(.post-modal) {
   text-decoration: underline;
 }
 
-.post-text::-webkit-scrollbar {
-  width: 3.2rem;
+.post-text::-webkit-scrollbar,
+.post-modal::-webkit-scrollbar {
+  width: 2.4rem;
 }
 
 .post-text::-webkit-scrollbar-thumb {
   background: var(--scroll-bar-color);
   height: 18.3rem;
-  border: 1.2rem solid var(--background-white);
+  border: 1rem solid var(--background-white);
   border-radius: 2.6rem;
 }
 
 .post-text::-webkit-scrollbar-track {
   background-color: var(--background-white);
+  border-radius: 1.3rem;
+}
+
+.post-modal::-webkit-scrollbar-thumb {
+  background: var(--scroll-bar-color);
+  height: 18.3rem;
+  border: 1rem solid var(--background-lightgray);
+  border-radius: 2.6rem;
+}
+
+.post-modal::-webkit-scrollbar-track {
+  background-color: var(--background-lightgray);
   border-radius: 1.3rem;
 }
 
@@ -263,11 +287,10 @@ img.tomong-icon {
 .comment-setting {
   color: var(--black-font-color);
   display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
   gap: 0.8rem;
-
-  position: absolute;
-  bottom: -3rem;
-  right: 3rem;
   font-size: var(--small-text-font-size);
 }
 .comment-setting input {
@@ -275,8 +298,9 @@ img.tomong-icon {
 }
 
 .comment-setting button {
-  position: absolute;
-  bottom: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .comment-articles-section {
@@ -327,8 +351,9 @@ img.tomong-icon {
 }
 
 .send-btn {
-  position: relative;
-  top: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 input[type="checkbox"]:checked + label.checkbox::before {
@@ -353,6 +378,8 @@ input[type="checkbox"]:checked + label.checkbox::before {
   }
   .post-text {
     min-width: 30rem;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
     height: fit-content;
     max-height: max-content;
   }
@@ -386,18 +413,9 @@ input[type="checkbox"]:checked + label.checkbox::before {
     height: 5rem;
   }
 }
+
 @media (max-width: 480px) {
-  .post-section {
-    height: 60%;
-  }
-  .post-text {
-    min-width: 30rem;
-    height: 76%;
-  }
-  .profile-info {
-    margin: 0;
-  }
-  .comment-section {
-    height: 35%;
+  .long-profile-info {
+    font-size: var(--body-font-size);
   }
 }

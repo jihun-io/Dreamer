@@ -284,14 +284,24 @@ export default function PostContent({
             <h2 className="sr-only">글 본문 내용 확인</h2>
             <section className={styles["post-info-section"]}>
               <h3 className="sr-only">작성자 정보 및 본문 관련 버튼 모음</h3>
-              <Link className={styles.profile} href={`/${postData.authorId}`}>
+              <Link
+                className={styles.profile}
+                href={`/users/${postData.authorId}`}
+              >
                 <img
                   src={`/api/account/avatar/${postData.authorId}`}
                   width={49}
                   height={49}
                   alt="프로필 사진"
                 />
-                <p className={styles["profile-info"]}>
+                <p
+                  className={`${styles["profile-info"]} ${
+                    postData.authorName.length > 7 ||
+                    postData.authorId.length > 7
+                      ? styles["long-profile-info"]
+                      : ""
+                  }`}
+                >
                   {postData.authorName}
                   <span>{`@${postData.authorId}`}</span>
                   <time
