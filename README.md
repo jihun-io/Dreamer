@@ -27,7 +27,7 @@
 ### 2. IDE
 ![](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=flat-square&logo=Visual%20Studio%20Code&logoColor=white)
 ### 3. 사용 기술
-![리액트]( https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black ) ![다음.js]( https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Nextdotjs&logoColor=white ) ![CSS 모듈]( https://img.shields.io/badge/CSS%20Modules-000000?style=for-the-badge&logo=CSSModules&logoColor=white ) ![Firebase](https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white)![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white)
+![리액트]( https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black ) ![다음.js]( https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Nextdotjs&logoColor=white ) ![CSS 모듈]( https://img.shields.io/badge/CSS%20Modules-000000?style=for-the-badge&logo=CSSModules&logoColor=white ) ![Firebase](https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white) ![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white)
 ![Algolia](https://img.shields.io/badge/Algolia-003DFF?style=for-the-badge&logo=Algolia&logoColor=white)
 
 ## Ⅱ. 프로젝트의 목표와 기능
@@ -42,20 +42,21 @@
 - 구글로그인, 개인이메일인증을 통한 가입을 통해서 가입 후 서비스이용 가능
 - 내가 꾼 꿈의 장르,느낌 등을 체크하고 글과 사진을 통해 기록을 남겨 공유할수있는 다이어리형 SNS
 - 앨런AI를 통해 작성한 꿈에 대한 해몽을 받고, 타인과 함께 공유 할 수 있는 플랫폼
-- 비회원에게도 공개개시글을 공유하여 함께 감상가능
+- 비회원에게도 공개게게시글을 공유하여 함께 감상가능
 
 ## Ⅲ. 프로젝트 구조와 개발 일정
 ### 3.1 프로젝트 폴더 구조
 <details>
-<summary>접기 / 펼치기 </summary>  
+<summary>접기 / 펼치기 </summary> 
 
-📦Dreamer  
+📦dreamer  
  ┣ 📂public  
  ┃ ┣ 📂fonts  
  ┃ ┃ ┣ 📂NanumBarunPenB  
  ┃ ┃ ┗ 📂NanumBarunPenR  
  ┃ ┣ 📂images  
- ┃ ┗ 📂metadata  
+ ┃ ┣ 📂metadata  
+ ┃ ┗ 📜robots.txt  
  ┣ 📂src  
  ┃ ┣ 📂app  
  ┃ ┃ ┣ 📂account  
@@ -67,9 +68,6 @@
  ┃ ┃ ┃ ┃ ┗ 📜page.js  
  ┃ ┃ ┃ ┣ 📜Account.module.css  
  ┃ ┃ ┃ ┗ 📜page.js  
- ┃ ┃ ┣ 📂alarm  
- ┃ ┃ ┃ ┣ 📜page.js  
- ┃ ┃ ┃ ┗ 📜page.module.css  
  ┃ ┃ ┣ 📂api  
  ┃ ┃ ┃ ┣ 📂account  
  ┃ ┃ ┃ ┃ ┣ 📂avatar  
@@ -94,6 +92,8 @@
  ┃ ┃ ┃ ┃ ┣ 📂login  
  ┃ ┃ ┃ ┃ ┃ ┗ 📜route.js  
  ┃ ┃ ┃ ┃ ┣ 📂logout  
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜route.js  
+ ┃ ┃ ┃ ┃ ┣ 📂reset-password  
  ┃ ┃ ┃ ┃ ┃ ┗ 📜route.js  
  ┃ ┃ ┃ ┃ ┣ 📂send-email-verification  
  ┃ ┃ ┃ ┃ ┃ ┗ 📜route.js  
@@ -145,6 +145,8 @@
  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜route.js  
  ┃ ┃ ┃ ┣ 📂recommends  
  ┃ ┃ ┃ ┃ ┗ 📜route.js  
+ ┃ ┃ ┃ ┣ 📂report  
+ ┃ ┃ ┃ ┃ ┗ 📜route.js  
  ┃ ┃ ┃ ┣ 📂today  
  ┃ ┃ ┃ ┃ ┗ 📜route.js  
  ┃ ┃ ┃ ┗ 📂tomong  
@@ -157,21 +159,6 @@
  ┃ ┃ ┃ ┃ ┣ 📂streaming-token  
  ┃ ┃ ┃ ┃ ┃ ┗ 📜route.js  
  ┃ ┃ ┃ ┃ ┗ 📜route.js  
- ┃ ┃ ┣ 📂debug  
- ┃ ┃ ┃ ┣ 📂posting  
- ┃ ┃ ┃ ┃ ┣ 📂[postId]  
- ┃ ┃ ┃ ┃ ┃ ┗ 📜page.js  
- ┃ ┃ ┃ ┃ ┣ 📜page.js  
- ┃ ┃ ┃ ┃ ┗ 📜page.module.css  
- ┃ ┃ ┃ ┣ 📂posts  
- ┃ ┃ ┃ ┃ ┣ 📂[userId]  
- ┃ ┃ ┃ ┃ ┃ ┣ 📜page.js  
- ┃ ┃ ┃ ┃ ┃ ┗ 📜page.module.css  
- ┃ ┃ ┃ ┃ ┣ 📜page.js  
- ┃ ┃ ┃ ┃ ┗ 📜page.module.css  
- ┃ ┃ ┃ ┗ 📂user-modify  
- ┃ ┃ ┃ ┃ ┣ 📜page.js  
- ┃ ┃ ┃ ┃ ┗ 📜page.module.css  
  ┃ ┃ ┣ 📂join  
  ┃ ┃ ┃ ┣ 📂verify-email  
  ┃ ┃ ┃ ┃ ┣ 📜page.js  
@@ -188,6 +175,7 @@
  ┃ ┃ ┃ ┣ 📜page.js  
  ┃ ┃ ┃ ┗ 📜page.module.css  
  ┃ ┃ ┣ 📂search  
+ ┃ ┃ ┃ ┣ 📜Search.module.css  
  ┃ ┃ ┃ ┗ 📜page.js  
  ┃ ┃ ┣ 📂signup  
  ┃ ┃ ┃ ┣ 📜page.js  
@@ -204,13 +192,11 @@
  ┃ ┃ ┣ 📜not-found.js  
  ┃ ┃ ┣ 📜page.js  
  ┃ ┃ ┣ 📜page.module.css  
- ┃ ┃ ┗ 📜reset.css  
+ ┃ ┃ ┣ 📜reset.css  
+ ┃ ┃ ┗ 📜sitemap.js  
  ┃ ┣ 📂components  
  ┃ ┃ ┣ 📂auth  
  ┃ ┃ ┃ ┗ 📜AuthStateHandler.jsx  
- ┃ ┃ ┣ 📂debug  
- ┃ ┃ ┃ ┣ 📜Comments.jsx  
- ┃ ┃ ┃ ┗ 📜Comments.module.css  
  ┃ ┃ ┣ 📂dropDown  
  ┃ ┃ ┃ ┣ 📜DropDown.jsx  
  ┃ ┃ ┃ ┗ 📜DropDown.module.css  
@@ -232,12 +218,14 @@
  ┃ ┃ ┣ 📂login  
  ┃ ┃ ┃ ┣ 📜EmailSignup.jsx  
  ┃ ┃ ┃ ┣ 📜EmailSignup.module.css  
+ ┃ ┃ ┃ ┣ 📜FindPassword.jsx  
  ┃ ┃ ┃ ┣ 📜SocialLogin.jsx  
  ┃ ┃ ┃ ┗ 📜SocialLogin.module.css  
  ┃ ┃ ┣ 📂main  
  ┃ ┃ ┃ ┣ 📜MainList.jsx  
  ┃ ┃ ┃ ┣ 📜MainList.module.css  
- ┃ ┃ ┃ ┗ 📜Post.jsx  
+ ┃ ┃ ┃ ┣ 📜Post.jsx  
+ ┃ ┃ ┃ ┗ 📜Post.module.css  
  ┃ ┃ ┣ 📂modal  
  ┃ ┃ ┃ ┣ 📜CommentArticles.jsx  
  ┃ ┃ ┃ ┣ 📜CommentArticles.module.css  
@@ -247,11 +235,15 @@
  ┃ ┃ ┃ ┣ 📜Post.jsx  
  ┃ ┃ ┃ ┗ 📜PostContent.jsx  
  ┃ ┃ ┣ 📂profile  
+ ┃ ┃ ┃ ┣ 📜PostCard.jsx  
  ┃ ┃ ┃ ┣ 📜PostList.jsx  
  ┃ ┃ ┃ ┣ 📜Profile.jsx  
  ┃ ┃ ┃ ┣ 📜Profile.module.css  
  ┃ ┃ ┃ ┣ 📜ProfileEdit.jsx  
- ┃ ┃ ┃ ┗ 📜ProfileInfo.jsx  
+ ┃ ┃ ┃ ┣ 📜ProfileInfo.jsx  
+ ┃ ┃ ┃ ┗ 📜SparkButton.jsx  
+ ┃ ┃ ┣ 📂report  
+ ┃ ┃ ┃ ┗ 📜Report.jsx  
  ┃ ┃ ┣ 📂signup  
  ┃ ┃ ┃ ┣ 📜BasicInfoForm.jsx  
  ┃ ┃ ┃ ┣ 📜BasicInfoForm.module.css  
@@ -304,7 +296,7 @@
  ┃ ┃ ┣ 📜authSlice.js  
  ┃ ┃ ┣ 📜modalSlice.js  
  ┃ ┃ ┗ 📜store.js  
- ┃ ┗ 📂utils  
+ ┃ ┣ 📂utils  
  ┃ ┃ ┣ 📂auth  
  ┃ ┃ ┃ ┣ 📜checkUser.js  
  ┃ ┃ ┃ ┣ 📜tokenUtils.js  
@@ -312,22 +304,21 @@
  ┃ ┃ ┃ ┗ 📜verifyPassword.js  
  ┃ ┃ ┣ 📜calculateModalPosition.js  
  ┃ ┃ ┣ 📜constants.js  
+ ┃ ┃ ┣ 📜highlightText.js  
  ┃ ┃ ┣ 📜isMyPost.js  
  ┃ ┃ ┣ 📜markdownToHtml.js  
  ┃ ┃ ┣ 📜metadata.js  
  ┃ ┃ ┣ 📜outsideClickModalClose.js  
  ┃ ┃ ┣ 📜postTime.js  
+ ┃ ┃ ┣ 📜scrollHandler.js  
  ┃ ┃ ┣ 📜themeScript.js  
  ┃ ┃ ┗ 📜validation.js  
- ┣ 📜.eslintrc.json  
- ┣ 📜.gitignore  
- ┣ 📜.prettierrc  
+ ┣ 📜README.md  
  ┣ 📜build.sh  
  ┣ 📜jsconfig.json  
  ┣ 📜next.config.mjs  
  ┣ 📜package-lock.json  
- ┣ 📜package.json  
- ┗ 📜README.md
+ ┗ 📜package.json  
  
 </details>
 
@@ -390,8 +381,12 @@
 ![image](https://github.com/user-attachments/assets/dd5de133-ab3d-43cb-b88e-1ae1b73337c8)   
 ![image](https://github.com/user-attachments/assets/5c0674b3-fa35-4dc8-bd05-62c3f979b885)
 
+#### ▪ 팀 디스코드를 통한 PR내용확인(QA/QC기간)
+<img width="527" alt="image" src="https://github.com/user-attachments/assets/a60242be-e959-4218-919d-623b066f04ca" />
+
 ### 🛠️ 추가개발사항
 - 프로필 페이지 게시글 목록 무한스크롤 구현
+- 프로필 사진 삭제기능 (API작업 및 프론트작업)
 - 문의사항 페이지
 - 게시글 스크랩 기능
 - 알림 기능
@@ -400,15 +395,34 @@
 
 ### ✨느낀점
 #### [FE]황초희
-``` 3차프로젝트 진행하면서 느낀점 ```
+```
+팀프로젝트가 처음이거니와, 더불어 팀장도 첫경험이어서 미숙하고 어리버리한 부분이 많았을텐데,
+제가 진행하고자 하는 부분에있어서 팀원분들 모두 적극적으로 의견을 내주시고, 잘 따라주셨고,
+프로젝트의 시작부터 마무리까지 함께 소통하며 다같이 열심히 해서 좋은 결과를 낼 수 있지않았나, 생각합니다.
+다시한번 소통의 중요성을 깨달을 수 있었던 시간이었고, 너무나도 뜻깊은 시간이었습니다.
+```
 
 #### [FE]김지훈
-``` 3차프로젝트 진행하면서 느낀점 ```
+```
+팀원 분들 모두가 저의 조그마한 아이디어에 살을 붙여 주시고 더 나은 결과물을 만들어내도록 노력해 주셔서 정말 감사했습니다.
+첫 협업 프로젝트다 보니 처음에는 많이 미숙한 부분도 많았지만, 그래도 팀원 분들이 함께 도와주고 이끌어주신 덕분에
+모두가 만족할 수 있는 결과가 나온 것 같습니다. 짧으면서도 길었던 3주 동안 모두 치열하게 프로젝트에 몰두하시느라
+고생 많으셨습니다. 즐거운 연말 보내세요!
+```
 
 #### [FE]한지현
-``` 3차프로젝트 진행하면서 느낀점 ```
+```
+프로젝트를 시작 할 때 개발이 익숙하지 않은 부분이 많아 어려움이 많았었는데, 팀원들과 함께 프로젝트를 진행하면서
+조금씩 새로운 것을 알아갈 수 있었습니다.소통의 중요성을 깨달을 수 있는 시간이었습니다. 또한 혼자 진행했다면
+막히거나 헤맸을 부분도 팀원들과 함께라 이겨낸 것 같아 뜻 깊은 시간이었습니다.
+```
 
 #### [FE]하진희
-``` 3차프로젝트 진행하면서 느낀점 ```
+```
+첫 팀 프로젝트를 통해 서로의 코드를 보고 유지 보수 하는 과정에서 더 넓은 시야를 가지게 되었습니다.
+익숙하지 않던 코드를 새롭게 배우는 즐거움과 코드 / 깃 컨벤션 적용, 깃허브 활용을 통해 성장할 수 있었습니다.
+무엇보다, 팀원들의 따뜻한 노력과 애정 덕분에 이 프로젝트가 정말 특별한 경험으로 남았습니다.
+앞으로도 함께 더 멋진 Dreamer를 만들어가고 싶습니다. 정말 감사드립니다, 드리머 최고!
+```
 
 
